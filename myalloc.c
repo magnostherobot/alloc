@@ -1,6 +1,6 @@
 #if 0
   (
-    echo "PROJECT_NAME=CS3104P1"
+    echo "PROJECT_NAME=alloc"
     echo "INPUT=myalloc.c"
     echo "OPTIMIZE_OUTPUT_FOR_C=YES"
     echo "EXTRACT_STATIC=YES"
@@ -9,22 +9,20 @@
     echo "HTML_OUTPUT=docs"
   ) | doxygen -
   exit
-#endif 
+#endif
 
 /**
  * @file myalloc.c
  * @author Stuart Norcross
- * @author 150001937
+ * @author Tom Harley
  * $Date: 4 Oct 2017 $
- * @brief Submission for CS3104 Practical 1 ("myalloc")
+ * @brief Implementation of malloc and free
  *
- * Single submission file for CS3104's first 2017 practical,
- * to implement `malloc` and `free` under the names `myalloc` and
+ * Implemented `malloc` and `free` under the names `myalloc` and
  * `myfree` respectively.
  *
  * This file was originally created by Stuart Norcross on 12/03/2010
- * and has been edited and completed by the submitter for this
- * practical submission.
+ * and has been edited by Tom Harley.
  */
 
 // for sysconf():
@@ -106,7 +104,7 @@ static header* start = NULL;
  */
 static header* end = NULL;
 
-/** 
+/**
  * @brief Global "constant" representing the size of a page in bytes.
  *
  * Calculated at runtime.
@@ -166,7 +164,7 @@ static header* first_enough_space(
  * bytes.
  * @param start_of_list The free-list to search through.
  * @returns The smallest item in the free-list with enough space to store
- * data of `s` bytes; `NULL` otherwise. 
+ * data of `s` bytes; `NULL` otherwise.
  */
 static header* smallest_enough_space(
   size_t minimum_size, flnode* start_of_list);
@@ -191,7 +189,7 @@ static flnode* node_before(flnode* n, flnode* start_of_list);
  * @param right_node The "right" (larger-address) `flnode`.
  * @returns `TRUE` if `n` directly precedes `m` in memory, `FALSE`
  * otherwise.
- */ 
+ */
 static bool is_contiguous(flnode* left_node, flnode* right_node);
 
 /**
@@ -467,7 +465,7 @@ static header* unmap_excess_pages(header* h) {
   // find number of free pages
   int pages = (e - q) / PAGE_SIZE;
   debug("found %i pages to unmap\n", pages);
-  
+
   // I can't find anywhere what munmap-ing with a range of 0 does,
   // so this is just in case it would do something bad:
   if (!pages) {
